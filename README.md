@@ -1,4 +1,6 @@
-weather-severity-model
+Weather Severity Model
 ======================
 
-Predicting weather severity from national weather service alerts
+The US National Weather Service issues severe weather warnings to warn the public of threats to life and property. Each type of warning has a list of minimal issuance criteria (as per this directive), however the National Weather Service does not indicate the severity of the weather event in a structured format within the alert. For example, a Severe Thunderstorm Warning is issued roughly once a week in New York each August, though the vast majority pass through quickly and cause little or no damage. At the same time, the Severe Thunderstorm Warning was also the main alert type issued for the 2012 derecho, which killed 22 people across seven states and left 4.2 million without power for an extended period.
+
+The key to understanding the severity of the event may be to understand the free-text descriptions and instructions inside the alert. The goal of this project is to build a machine learning model that tries to learn a severity ranking from alert warning text. A secondary goal would be to extract important keywords from the alert text that are specific to the event and its severity. 
