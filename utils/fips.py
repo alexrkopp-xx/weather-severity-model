@@ -1,3 +1,9 @@
+"""
+    Author: Alex Kopp
+
+    Small utility to convert between states/counties and FIPS codes
+"""
+
 state_codes = {
     'WASHINGTON': 53, 'DELAWARE': 10, 'DISTRICT OF COLUMBIA': 11, 'WISCONSIN': 55, 'WEST VIRGINIA': 54, 'HAWAII': 15,
     'FLORIDA': 12, 'WYOMING': 56, 'PUERTO RICO': 72, 'NEW JERSEY': 34, 'NEW MEXICO': 35, 'TEXAS': 48, 'LOUISIANA': 22,
