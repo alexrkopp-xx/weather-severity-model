@@ -66,17 +66,21 @@ lstTargetDeaths = []
 
 with con:
     cur = con.cursor()
-    query = "SELECT c.event, c.begin_time, c.category, c.urgency, c.severity, c.certainty, c.expires," \
-            " c.headline, c.description, c.instruction, capfips.fips, se.injuries_direct, se.injuries_indirect," \
-            " se.deaths_direct, se.deaths_indirect, se.property_damage, se.crop_damage FROM `weather-severity`.cap" \
-            " c JOIN `weather-severity`.cap_fips capfips ON capfips.cap = c.id JOIN `weather-severity`.storm_events se" \
-            " ON se.fips = capfips.fips WHERE ABS(TIMESTAMPDIFF(HOUR,c.begin_time,se.begin_time)) <= 3 AND" \
-            " ABS(TIMESTAMPDIFF(HOUR,c.expires,se.end_time)) <= 3"
+    cur.execute('SELECT * FROM `weather-severity`.cap c JOIN `weather-severity`.cap_fips capfips ON capfips.cap = c.id '
+                'JOIN `weather-severity`.storm_events se ON se.fips = capfips.fips '
+                'JOIN `weather-severity`.valid_events ve '
+                'WHERE (ve.cap_type = c.event) AND (ve.se_type = se.event_type) AND (ve.valid = 1) AND ((c.begin_time >= se.begin_time AND c.expires <= se.end_time) '
+                'OR ( ABS(TIMESTAMPDIFF(MINUTE,c.begin_time,se.begin_time)) <= 0.25 * TIMESTAMPDIFF(MINUTE,se.end_time,se.begin_time) '
+                'AND ABS(TIMESTAMPDIFF(MINUTE,c.expires,se.end_time)) <= 0.25 * TIMESTAMPDIFF(MINUTE,se.end_time,se.begin_time)) '
+                'OR (se.begin_time >= c.begin_time AND se.end_time <= c.expires) '
+                'OR ( ABS(TIMESTAMPDIFF(MINUTE,c.begin_time,se.begin_time)) <= 0.25 * TIMESTAMPDIFF(MINUTE,c.expires,c.begin_time) '
+                'AND ABS(TIMESTAMPDIFF(MINUTE,c.expires,se.end_time)) <= 0.25 * TIMESTAMPDIFF(MINUTE,c.expires,c.begin_time))) LIMIT 10'
+    )
 
-    cur.execute(query)
     field_names = [i[0] for i in cur.description]
     #print field_names
     for row in cur:
+        print row.keys()
         lstTargetDamage.append(row['property_damage'] + row['crop_damage'])
         lstTargetInjuries.append(row['injuries_indirect'] + row['injuries_direct'])
         lstTargetDeaths.append(row['deaths_indirect'] + row['deaths_direct'])
@@ -85,24 +89,19 @@ with con:
         lstHeadlines.append(row['headline'])
         lstInstructions.append(row['instruction'])
 
-        row['duration'] = (row['expires']-row['begin_time']).seconds
+        features_1 = dict()
+        features_1['duration'] = (row['expires']-row['begin_time']).seconds
+        features_1['event'] = row['event']
+        features_1['responseType'] = row['responseType']
+        features_1['urgency'] = row['urgency']
+        features_1['severity'] = row['severity']
+        features_1['certainty'] = row['certainty']
 
-        del row['expires']
-        del row['begin_time']
-        del row['instruction']
-        del row['property_damage']
-        del row['crop_damage']
-        del row['injuries_indirect']
-        del row['injuries_direct']
-        del row['deaths_indirect']
-        del row['deaths_direct']
-        del row['description']
-        del row['headline']
-
-        row['fips'] = str(row['fips']) # Convert FIPS to string so we get dummy variables
-        lstFeatures.append(row)
+        features_1['fips'] = str(row['fips']) # Convert FIPS to string so we get dummy variables
+        lstFeatures.append(features_1)
 
     # Part 1
+    print lstFeatures
     fvec = DictVectorizer()
     arrFeatures = fvec.fit_transform(lstFeatures) # Important to keep in sparse matrix
     print "(Part 1) Writing Feature Names to feature_names_1.dat"
@@ -147,7 +146,5 @@ with con:
     print "Writing Feature Matrix to features.dat"
     with open('features.dat', 'wb') as outfile:
         pickle.dump(features, outfile, pickle.HIGHEST_PROTOCOL)
-
-
 
     #print features.todense()
