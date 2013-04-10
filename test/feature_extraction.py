@@ -60,9 +60,12 @@ lstHeadlines = []
 lstInstructions = []
 
 # The values we are trying to predict
-lstTargetDamage = []
-lstTargetInjuries = []
-lstTargetDeaths = []
+lstTargetPropertyDamages = []
+lstTargetCropDamages = []
+lstTargetDirectInjuries = []
+lstTargetIndirectInjuries = []
+lstTargetIndirectDeaths = []
+lstTargetDirectDeaths = []
 
 with con:
     cur = con.cursor()
@@ -81,9 +84,12 @@ with con:
     #print field_names
     for row in cur:
         print row.keys()
-        lstTargetDamage.append(row['property_damage'] + row['crop_damage'])
-        lstTargetInjuries.append(row['injuries_indirect'] + row['injuries_direct'])
-        lstTargetDeaths.append(row['deaths_indirect'] + row['deaths_direct'])
+        lstTargetPropertyDamages.append(row['property_damage'])
+        lstTargetCropDamages.append(row['crop_damage'])
+        lstTargetDirectInjuries.append(row['injuries_direct'])
+        lstTargetIndirectInjuries.append(row['injuries_indirect'])
+        lstTargetDirectDeaths.append(row['deaths_direct'])
+        lstTargetIndirectDeaths.append(row['deaths_indirect'])
 
         lstDescriptions.append(row['description'])
         lstHeadlines.append(row['headline'])
@@ -106,7 +112,7 @@ with con:
     arrFeatures = fvec.fit_transform(lstFeatures) # Important to keep in sparse matrix
     print "(Part 1) Writing Feature Names to feature_names_1.dat"
 
-    with open('features_names_1.dat', 'wb') as outfile:
+    with open('feature_names_1.dat', 'wb') as outfile:
         pickle.dump(fvec.get_feature_names(), outfile, pickle.HIGHEST_PROTOCOL)
 
     # Going to be used for the next few parts
@@ -146,5 +152,29 @@ with con:
     print "Writing Feature Matrix to features.dat"
     with open('features.dat', 'wb') as outfile:
         pickle.dump(features, outfile, pickle.HIGHEST_PROTOCOL)
+
+    print "Writing Target Direct Deaths"
+    with open('targets_direct_deaths.dat', 'wb') as outfile:
+        pickle.dump(lstTargetDirectDeaths, outfile, pickle.HIGHEST_PROTOCOL)
+
+    print "Writing Target Direct Injuries"
+    with open('targets_direct_injuries.dat', 'wb') as outfile:
+        pickle.dump(lstTargetDirectInjuries, outfile, pickle.HIGHEST_PROTOCOL)
+
+    print "Writing Target Property Damages"
+    with open('targets_property_damages.dat', 'wb') as outfile:
+        pickle.dump(lstTargetPropertyDamages, outfile, pickle.HIGHEST_PROTOCOL)
+
+    print "Writing Target Indirect Deaths"
+    with open('targets_indirect_deaths.dat', 'wb') as outfile:
+        pickle.dump(lstTargetIndirectDeaths, outfile, pickle.HIGHEST_PROTOCOL)
+
+    print "Writing Target Indirect Injuries"
+    with open('targets_indirect_injuries.dat', 'wb') as outfile:
+        pickle.dump(lstTargetIndirectInjuries, outfile, pickle.HIGHEST_PROTOCOL)
+
+    print "Writing Target Crop Damages"
+    with open('targets_crop_damages.dat', 'wb') as outfile:
+        pickle.dump(lstTargetCropDamages, outfile, pickle.HIGHEST_PROTOCOL)
 
     #print features.todense()
