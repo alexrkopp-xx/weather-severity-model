@@ -77,7 +77,7 @@ with con:
                 'AND ABS(TIMESTAMPDIFF(MINUTE,c.expires,se.end_time)) <= 0.25 * TIMESTAMPDIFF(MINUTE,se.end_time,se.begin_time)) '
                 'OR (se.begin_time >= c.begin_time AND se.end_time <= c.expires) '
                 'OR ( ABS(TIMESTAMPDIFF(MINUTE,c.begin_time,se.begin_time)) <= 0.25 * TIMESTAMPDIFF(MINUTE,c.expires,c.begin_time) '
-                'AND ABS(TIMESTAMPDIFF(MINUTE,c.expires,se.end_time)) <= 0.25 * TIMESTAMPDIFF(MINUTE,c.expires,c.begin_time))) LIMIT 10'
+                'AND ABS(TIMESTAMPDIFF(MINUTE,c.expires,se.end_time)) <= 0.25 * TIMESTAMPDIFF(MINUTE,c.expires,c.begin_time)))'
     )
 
     field_names = [i[0] for i in cur.description]
@@ -96,9 +96,10 @@ with con:
         lstInstructions.append(row['instruction'])
 
         features_1 = dict()
+        # TODO Normalize Duration!
         features_1['duration'] = (row['expires']-row['begin_time']).seconds
         features_1['event'] = row['event']
-        features_1['responseType'] = row['responseType']
+        #features_1['responseType'] = row['responseType'] None of the CAP reports have a response type.. Removing
         features_1['urgency'] = row['urgency']
         features_1['severity'] = row['severity']
         features_1['certainty'] = row['certainty']
@@ -116,31 +117,33 @@ with con:
         pickle.dump(fvec.get_feature_names(), outfile, pickle.HIGHEST_PROTOCOL)
 
     # Going to be used for the next few parts
-    freeTextVectorizer = TfidfVectorizer(charset_error='replace', tokenizer=stemming_tokenizer, analyzer='word', ngram_range=(1,2), stop_words=stopword_list, lowercase=True, max_features=None, norm='l2', use_idf=True, smooth_idf=True)
+    headlineTextVectorizer = TfidfVectorizer(charset_error='replace', tokenizer=stemming_tokenizer, analyzer='word', ngram_range=(1,2), stop_words=stopword_list, lowercase=True, max_features=None, norm='l2', use_idf=True, smooth_idf=True)
+    descriptionTextVectorizer = TfidfVectorizer(charset_error='replace', tokenizer=stemming_tokenizer, analyzer='word', ngram_range=(1,2), stop_words=stopword_list, lowercase=True, max_features=None, norm='l2', use_idf=True, smooth_idf=True)
+    instructionTextVectorizer = TfidfVectorizer(charset_error='replace', tokenizer=stemming_tokenizer, analyzer='word', ngram_range=(1,2), stop_words=stopword_list, lowercase=True, max_features=None, norm='l2', use_idf=True, smooth_idf=True)
 
     # Part 2 (Headlines)
-    headlineFeatures = freeTextVectorizer.fit_transform(lstHeadlines)
+    headlineFeatures = headlineTextVectorizer.fit_transform(lstHeadlines)
     print headlineFeatures.shape
     print "(Part 2) Writing Feature Names to feature_names_2.dat"
 
     with open('feature_names_2.dat', 'wb') as outfile:
-        pickle.dump(freeTextVectorizer.get_feature_names(), outfile, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(headlineTextVectorizer.get_feature_names(), outfile, pickle.HIGHEST_PROTOCOL)
 
     # Part 3 (Descriptions)
-    descriptionFeatures = freeTextVectorizer.fit_transform(lstDescriptions)
+    descriptionFeatures = descriptionTextVectorizer.fit_transform(lstDescriptions)
     print descriptionFeatures.shape
     print "(Part 3) Writing Feature Names to feature_names_3.dat"
 
     with open('feature_names_3.dat', 'wb') as outfile:
-        pickle.dump(freeTextVectorizer.get_feature_names(), outfile, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(descriptionTextVectorizer.get_feature_names(), outfile, pickle.HIGHEST_PROTOCOL)
 
     # Part 4 (Instructions)
-    instructionFeatures = freeTextVectorizer.fit_transform(lstInstructions)
+    instructionFeatures = instructionTextVectorizer.fit_transform(lstInstructions)
     print instructionFeatures.shape
     print "(Part 4) Writing Feature Names to feature_names_4.dat"
 
     with open('feature_names_4.dat', 'wb') as outfile:
-        pickle.dump(freeTextVectorizer.get_feature_names(), outfile, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(instructionTextVectorizer.get_feature_names(), outfile, pickle.HIGHEST_PROTOCOL)
 
     # Combine the parts
     features = hstack([arrFeatures,headlineFeatures])
@@ -148,6 +151,22 @@ with con:
     features = hstack([features,instructionFeatures])
 
     print features.shape
+
+    print "Writing Part 1 Vectorizer to vectorizer_part_1.dat"
+    with open('vectorizer_part_1.dat', 'wb') as outfile:
+        pickle.dump(fvec, outfile, pickle.HIGHEST_PROTOCOL)
+
+    print "Writing Part 2 Vectorizer to vectorizer_part_2.dat"
+    with open('vectorizer_part_2.dat', 'wb') as outfile:
+        pickle.dump(headlineTextVectorizer, outfile, pickle.HIGHEST_PROTOCOL)
+
+    print "Writing Part 3 Vectorizer to vectorizer_part_3.dat"
+    with open('vectorizer_part_3.dat', 'wb') as outfile:
+        pickle.dump(descriptionTextVectorizer, outfile, pickle.HIGHEST_PROTOCOL)
+
+    print "Writing Part 4 Vectorizer to vectorizer_part_4.dat"
+    with open('vectorizer_part_4.dat', 'wb') as outfile:
+        pickle.dump(instructionTextVectorizer, outfile, pickle.HIGHEST_PROTOCOL)
 
     print "Writing Feature Matrix to features.dat"
     with open('features.dat', 'wb') as outfile:
