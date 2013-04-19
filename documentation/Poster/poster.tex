@@ -1,0 +1,277 @@
+\documentclass[landscape,final,a1paper,fontscale=0.45]{baposter}
+
+\usepackage{calc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{relsize}
+\usepackage{multirow}
+\usepackage{rotating}
+\usepackage{bm}
+\usepackage{url}
+
+\usepackage{pifont}% http://ctan.org/pkg/pifont
+\newcommand{\cmark}{\ding{51}}%
+\newcommand{\xmark}{\ding{55}}%
+
+\usepackage{graphicx}
+\usepackage{multicol}
+
+%\usepackage{times}
+%\usepackage{helvet}
+%\usepackage{bookman}
+\usepackage{palatino}
+
+\newcommand{\captionfont}{\footnotesize}
+
+\renewcommand{\familydefault}{\sfdefault}
+
+\graphicspath{{images/}{../images/}}
+\usetikzlibrary{calc}
+
+\newcommand{\SET}[1]  {\ensuremath{\mathcal{#1}}}
+\newcommand{\MAT}[1]  {\ensuremath{\boldsymbol{#1}}}
+\newcommand{\VEC}[1]  {\ensuremath{\boldsymbol{#1}}}
+\newcommand{\Video}{\SET{V}}
+\newcommand{\video}{\VEC{f}}
+\newcommand{\track}{x}
+\newcommand{\Track}{\SET T}
+\newcommand{\LMs}{\SET L}
+\newcommand{\lm}{l}
+\newcommand{\PosE}{\SET P}
+\newcommand{\posE}{\VEC p}
+\newcommand{\negE}{\VEC n}
+\newcommand{\NegE}{\SET N}
+\newcommand{\Occluded}{\SET O}
+\newcommand{\occluded}{o}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% Some math symbols used in the text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Multicol Settings
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setlength{\columnsep}{1.5em}
+\setlength{\columnseprule}{0mm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Save space in lists. Use this after the opening of the list
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\compresslist}{%
+\setlength{\itemsep}{1pt}%
+\setlength{\parskip}{0pt}%
+\setlength{\parsep}{0pt}%
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Begin of Document
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Here starts the poster
+%%%---------------------------------------------------------------------------
+%%% Format it to your taste with the options
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Define some colors
+
+%\definecolor{lightblue}{cmyk}{0.83,0.24,0,0.12}
+\definecolor{lightblue}{rgb}{0.145,0.6666,1}
+
+% Draw a video
+\newlength{\FSZ}
+\newcommand{\drawvideo}[3]{% [0 0.25 0.5 0.75 1 1.25 1.5]
+   \noindent\pgfmathsetlength{\FSZ}{\linewidth/#2}
+   \begin{tikzpicture}[outer sep=0pt,inner sep=0pt,x=\FSZ,y=\FSZ]
+   \draw[color=lightblue!50!black] (0,0) node[outer sep=0pt,inner sep=0pt,text width=\linewidth,minimum height=0] (video) {\noindent#3};
+   \path [fill=lightblue!50!black,line width=0pt] 
+     (video.north west) rectangle ([yshift=\FSZ] video.north east) 
+    \foreach \x in {1,2,...,#2} {
+      {[rounded corners=0.6] ($(video.north west)+(-0.7,0.8)+(\x,0)$) rectangle +(0.4,-0.6)}
+    }
+;
+   \path [fill=lightblue!50!black,line width=0pt] 
+     ([yshift=-1\FSZ] video.south west) rectangle (video.south east) 
+    \foreach \x in {1,2,...,#2} {
+      {[rounded corners=0.6] ($(video.south west)+(-0.7,-0.2)+(\x,0)$) rectangle +(0.4,-0.6)}
+    }
+;
+   \foreach \x in {1,...,#1} {
+     \draw[color=lightblue!50!black] ([xshift=\x\linewidth/#1] video.north west) -- ([xshift=\x\linewidth/#1] video.south west);
+   }
+   \foreach \x in {0,#1} {
+     \draw[color=lightblue!50!black] ([xshift=\x\linewidth/#1,yshift=1\FSZ] video.north west) -- ([xshift=\x\linewidth/#1,yshift=-1\FSZ] video.south west);
+   }
+   \end{tikzpicture}
+}
+
+\hyphenation{resolution occlusions}
+%%
+\begin{poster}%
+  % Poster Options
+  {
+  % Show grid to help with alignment
+  grid=false,
+  columns=5,
+  % Column spacing
+  colspacing=1em,
+  % Color style
+  bgColorOne=white,
+  bgColorTwo=white,
+  borderColor=lightblue,
+  headerColorOne=black,
+  headerColorTwo=lightblue,
+  headerFontColor=white,
+  boxColorOne=white,
+  boxColorTwo=lightblue,
+  % Format of textbox
+  textborder=roundedleft,
+  % Format of text header
+  eyecatcher=true,
+  headerborder=closed,
+  headerheight=0.1\textheight,
+%  textfont=\sc, An example of changing the text font
+  headershape=roundedright,
+  headershade=shadelr,
+  headerfont=\Large\bf\textsc, %Sans Serif
+  textfont={\setlength{\parindent}{1.5em}},
+  boxshade=plain,
+%  background=shade-tb,
+  background=plain,
+  linewidth=2pt
+  }
+  % Eye Catcher
+  {\includegraphics[height=5em]{images/cornelltech.png}} 
+  % Title
+  {\bf\textsc{Weather Severity Prediction}\vspace{0.5em}}
+  % Authors
+  {\textsc{Alex Kopp, Andrew Li}}
+  % University logoWikipedia
+  {% The makebox allows the title to flow into the logo, this is a hack because of the L shaped logo.
+    \includegraphics[height=6em]{images/google.jpg}
+  }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Now define the boxes that make up the poster
+%%%---------------------------------------------------------------------------
+%%% Each box has a name and can be placed absolutely or relatively.
+%%% The only inconvenience is that you can only specify a relative position 
+%%% towards an already declared box. So if you have a box attached to the 
+%%% bottom, one to the top and a third one which should be in between, you 
+%%% have to specify the top and bottom boxes before you specify the middle 
+%%% box.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %
+    % A coloured circle useful as a bullet with an adjustably strong filling
+    \newcommand{\colouredcircle}{%
+      \tikz{\useasboundingbox (-0.2em,-0.32em) rectangle(0.2em,0.32em); \draw[draw=black,fill=lightblue,line width=0.03em] (0,0) circle(0.18em);}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \headerbox{Overview}{name=overview,column=0,row=0, span=3}{
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   \section*{Opportunity}
+   \vspace{-3mm} 
+   \indent \indent Lorem ipsum dolor sit amet, consectetur adipiscing elit. In eu velit et tortor dapibus facilisis quis ac nunc. Phasellus molestie erat vel risus dapibus varius. Nunc mollis urna a libero pellentesque faucibus. Cras nec luctus massa. Mauris eleifend aliquam felis a vulputate. Pellentesque faucibus adipiscing libero, eu hendrerit ligula rutrum nec. Morbi dolor nisl, congue at hendrerit et, tincidunt vel quam.
+
+Aenean iaculis dictum ipsum nec viverra. Nulla auctor felis nec dui pharetra posuere ut sed enim. Suspendisse potenti. Etiam placerat porta nisl nec facilisis. Donec ipsum metus, lacinia eu dictum vel, placerat eu arcu. Maecenas eget porta justo. Ut et neque tortor, non elementum purus. Phasellus ante est, pellentesque non varius vitae, pharetra quis dolor. Suspendisse in dictum ligula. Sed imperdiet nunc vel nibh luctus a porta leo venenatis. Integer quis sapien ac lectus condimentum condimentum.
+  \vspace{-3mm} 
+  \section*{Value}
+ \vspace{-3mm}
+ 
+\indent \indent Cras tincidunt tincidunt suscipit. Nullam adipiscing feugiat sem, eu malesuada enim ultricies in. Donec leo odio, tempor auctor molestie in, elementum lobortis orci. Fusce id lectus posuere leo aliquam facilisis dapibus quis mi. Curabitur egestas dignissim nisi sed accumsan. Ut sed tortor neque. Morbi in lorem sit amet velit bibendum luctus at a justo. Mauris orci turpis, dictum eu facilisis id, hendrerit non mi. Ut erat justo, eleifend vel tempus at, elementum quis enim. Nunc imperdiet varius sapien, et cursus nisi molestie a. Pellentesque diam diam, congue vitae mollis a, molestie sit amet ante. Nullam placerat magna eros, eget auctor elit. Vivamus id libero purus, quis dictum felis.
+
+ }
+
+  
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \headerbox{Results}{name=results,column=3, span=2, row=0}{
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \begin{center}
+  
+   %\includegraphics[width=0.8\linewidth]{images/fixedCgraph.pdf}
+  \begin{tabular}{c|c|c|c}
+$\boldsymbol{F_1}$ \textbf{\textit{Score}} & \textbf{Baseline} & \textbf{Refined} & \textbf{Refined + Links} \\ 
+\hline 
+Business & 0.70 & $0.75$ & $0.75$ \\ 
+\hline 
+Culture & 0.89 & $0.91$ & $0.92$ \\ 
+\hline 
+Health & 0.84 & $0.86$ & $0.86$ \\ 
+\hline 
+Sports & 0.91 & $0.93$ & $0.94$ \\ 
+\hline 
+Technology & 0.72 & $0.76$ & $0.76$ \\ 
+\hline
+\hline
+\textbf{\textit{Average}} & \textbf{Baseline} & \textbf{Refined} & \textbf{Refined + Links} \\ 
+\hline 
+Precision & 0.81 & $0.84$ & $0.85$ \\ 
+\hline 
+Recall & 0.81 & $0.84$ & $0.85$ \\ 
+\hline 
+$\text{F}_1$ Score & 0.81 & $0.84$ & $0.85$ \\ 
+\hline 
+\end{tabular} 
+
+\end{center}
+
+   \vspace{0.3em}
+ }
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\headerbox{Discussion}{name=discussion,column=3,span=2,row=0, below=results}{
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  
+Morbi nisi dui, ultricies in hendrerit eu, gravida eu odio. Aliquam lobortis sollicitudin iaculis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Phasellus vitae quam dui. Pellentesque cursus adipiscing tellus, vel varius ipsum aliquam non. Fusce in fringilla enim. Integer scelerisque, urna et volutpat dictum, arcu dui ultrices augue, quis sodales enim elit vitae metus. Donec et arcu ante, nec dignissim magna. Mauris eget odio in sapien adipiscing vehicula. Nulla auctor lacus nec felis bibendum fermentum.
+
+Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed eget scelerisque nibh. Nam in magna vel metus adipiscing tempus nec sed urna. Donec vel nibh vitae dolor elementum iaculis. Cras elementum dolor eget diam sollicitudin scelerisque. Donec vestibulum, tortor a interdum placerat, turpis nisi mattis est, non tristique orci sem quis eros. Sed et eros massa, sit amet molestie neque. Vestibulum nisi sapien, faucibus sed accumsan id, ultricies quis arcu. Nunc vel pellentesque nisi. Proin nec ipsum eros. Etiam tristique orci sit amet nibh venenatis at tempus enim ornare. Aliquam eu quam vel lorem porta vehicula. Nunc interdum eros rutrum massa aliquet vitae malesuada nunc rhoncus.u
+
+Phasellus ultricies ornare lacus at porttitor. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Quisque odio nisi, elementum quis facilisis id, laoreet in tellus. Praesent pulvinar iaculis eros id auctor. Curabitur accumsan libero et dolor rutrum elementum. Maecenas porttitor faucibus nunc sit amet aliquet. Donec a posuere eros. Nunc ac neque sem, ut imperdiet mi. Integer imperdiet tortor at erat ornare aliquam. Nullam imperdiet felis sed massa iaculis volutpat. Nam eros lectus, vestibulum nec interdum at, blandit a nisl. In adipiscing tempor magna tristique sagittis. Quisque urna tellus, pulvinar ut interdum et, tempus in nunc. Nullam turpis arcu, convallis non consectetur a, luctus et lectus.
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\headerbox{Next Steps}{name=nextsteps,column=3,span=2,row=0,below=discussion, above=bottom}{
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Donec tortor massa, ornare eu vestibulum ut, molestie id est. Donec et nunc a magna semper dictum. Nulla ultrices neque nec quam aliquet a interdum magna facilisis. Vivamus tincidunt volutpat tempor. Nullam ut dui velit. Nullam nulla magna, porttitor in tincidunt ut, scelerisque nec libero. Integer quis risus non nunc tristique hendrerit quis eu lectus. Sed pharetra mauris sit amet urna molestie vel elementum turpis dictum. Aenean adipiscing, erat ac mattis sollicitudin, eros nulla luctus nunc, sit amet volutpat ante ante sed tellus. Pellentesque egestas metus nec orci iaculis egestas. Suspendisse potenti. Sed neque leo, ultricies ut condimentum ut, mollis sed dolor.
+
+   \vspace{0.0em}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \headerbox{Method}{name=method,column=0,below=overview, span=3, bottomaligned=nextsteps}{
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  %\noindent{\centering\includegraphics[width=0.15\linewidth]{images/scikit-learn-logo.png}\\}
+
+Donec eget laoreet quam. Maecenas condimentum mollis bibendum. Suspendisse massa purus, sollicitudin et porttitor eget, commodo ac lacus. Aliquam erat volutpat. Aenean nunc metus, cursus ac pharetra at, laoreet ac lacus. Vestibulum et neque sit amet nulla molestie faucibus dapibus eget turpis. Cras mollis turpis eget enim rutrum porttitor. Nunc pulvinar, tellus quis molestie adipiscing, mauris nibh tempor ligula, ut vulputate magna lorem et nibh.
+
+Praesent ac sodales leo. Donec tristique ullamcorper porta. Vivamus tincidunt leo sed sapien dignissim vulputate. Mauris ultrices luctus arcu. Aliquam scelerisque, massa quis auctor venenatis, mauris dui tempor magna, ut mattis sapien velit ut neque. Pellentesque erat est, fermentum eu commodo non, iaculis non sem. Morbi vel consectetur risus. Curabitur nibh dui, faucibus et tempus at, tristique eget lectus. Sed nec urna quis enim laoreet laoreet ut et urna. Maecenas vulputate magna a purus bibendum consequat. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+
+Etiam commodo gravida purus, et eleifend sapien adipiscing et. Integer porta commodo felis nec pharetra. Maecenas sed elementum dolor. Vestibulum sollicitudin ipsum non quam venenatis imperdiet in et erat. Nulla ut risus nibh. Donec auctor augue non mi mattis nec aliquet erat luctus. Aliquam neque enim, elementum a hendrerit vel, dictum ac arcu. Vestibulum et massa sit amet elit sodales convallis. Sed posuere augue a lacus lacinia rutrum. Fusce tincidunt porta diam sed luctus. Fusce sed leo velit, quis dictum risus. Nulla facilisi. Nullam turpis ipsum, tincidunt dignissim consectetur nec, cursus ut sem. Proin consequat ultricies mauris. Proin non lectus purus, vitae iaculis nisl.  
+
+Cras et venenatis arcu. Praesent eleifend semper hendrerit. Donec nec nibh nec mi tincidunt scelerisque sit amet sit amet velit. Nullam ut enim ut lacus placerat fringilla. In elementum vulputate gravida. Integer dapibus mi sed risus convallis id sollicitudin nisl gravida. Aliquam et lectus sed diam convallis sodales ut non eros.
+
+Nunc in arcu condimentum turpis sagittis gravida in ac elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi volutpat, velit faucibus feugiat accumsan, diam eros vestibulum tortor, ut feugiat mi nunc eu turpis. In eleifend tempor libero eu aliquet. Donec congue adipiscing hendrerit. Etiam aliquet venenatis libero vitae blandit. Sed vel dolor sed velit consectetur mattis. Nunc ut ipsum risus. Aenean malesuada urna vitae magna vestibulum nec vehicula erat aliquam. Nunc lorem elit, ornare et consequat nec, volutpat ac odio. Fusce dictum mauris eget lectus porta cursus. Quisque eu lacinia nibh.
+  \begin{center}
+  %\includegraphics[width=1\linewidth]{images/diagram.pdf}
+  
+  \section*{Algorithms}  
+  \begin{tabular}{r|ccccccc}
+  & \textbf{Lowercase} & \shortstack{\textbf{Remove} \\ \textbf{Stopwords}} & \textbf{Stemming} & \textbf{Features} & \shortstack{\textbf{Remove} \\ \textbf{Infrequent Words}} & \textbf{Normalization} & \textbf{Use Links}\\ 
+\hline 
+\rule{0pt}{2ex} \textbf{Baseline} & $\checkmark$ & $\checkmark$ & $\checkmark$ & \textit{Binary} & \xmark & \xmark & \xmark \\ 
+\textbf{Refined} & $\checkmark$ & $\checkmark$ & $\checkmark$ & \textit{TFIDF} & $\checkmark$ & $\checkmark$ & \xmark \\ 
+\textbf{Refined+Links} & $\checkmark$ & $\checkmark$ & $\checkmark$ & \textit{TFIDF} & $\checkmark$ & $\checkmark$ & $\checkmark$ \\ 
+\end{tabular} 
+  \end{center}
+ 
+  }
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\end{poster}
+
+\end{document}

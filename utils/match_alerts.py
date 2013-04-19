@@ -1,14 +1,19 @@
+"""
+    match_alerts.py
+
+    A utility that we used to visualize our CAP report and Storm Event database matching algorithm.
+
+    Runs query and outputs to CSV
+"""
+
 import logging
 import MySQLdb as mdb
 import csv
+from config import *
 
 logging.basicConfig(format='%(asctime)s;%(levelname)s:%(message)s', level=logging.DEBUG)
-mysql_host = 'localhost'
-mysql_user = 'root'
-mysql_pass = ''
-mysql_db = 'weather-severity'
 
-w = open('matched.csv','w')
+w = open('../matched.csv','w')
 writer = csv.writer(w, delimiter=',')
 
 con = mdb.connect(mysql_host, mysql_user, mysql_pass, mysql_db)
