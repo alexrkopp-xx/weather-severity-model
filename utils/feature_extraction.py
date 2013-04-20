@@ -61,7 +61,7 @@ with con:
     field_names = [i[0] for i in cur.description]
     #print field_names
     for row in cur:
-        print row.keys()
+        #print row.keys()
         lstTargetPropertyDamages.append(row['property_damage'])
         lstTargetCropDamages.append(row['crop_damage'])
         lstTargetDirectInjuries.append(row['injuries_direct'])
