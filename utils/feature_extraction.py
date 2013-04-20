@@ -8,14 +8,17 @@ from sklearn.preprocessing import StandardScaler
 import nltk
 import re
 import cPickle as pickle
-from config import *
 import datetime
 import os
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
+
+from config import *
 
 timenow = datetime.datetime.now()
 outputdir = "%02d-%02d-%02d %02d%02d%02d" % (timenow.year, timenow.month, timenow.day, timenow.hour, timenow.minute,
                                              timenow.second)
-os.path.mkdir(outputdir)
+os.mkdir(outputdir)
 stemmer = nltk.stem.PorterStemmer()
 
 
