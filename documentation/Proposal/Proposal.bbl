@@ -1,4 +1,4 @@
-\begin{thebibliography}{6}
+\begin{thebibliography}{8}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -34,5 +34,20 @@ Storm events database | national climatic data center, 2012.
 scikit-learn: machine learning in python, 2013.
 \newblock URL \url{http://scikit-learn.org/stable/}.
 \newblock [Online; accessed 26-February-2013].
+
+\bibitem[skl(2013)]{sklearn-flow}
+Machine learning cheat sheet, 2013.
+\newblock URL
+  \url{http://peekaboo-vision.blogspot.com/2013/01/machine-learning-cheat-sheet-for-scikit.html}.
+\newblock [Online; accessed 12-March-2013].
+
+\bibitem[Joachims(1998)]{JoachimsNLP}
+Joachims, Thorsten.
+\newblock Text categorization with support vector machines: Learning with many
+  relevant features.
+\newblock \emph{European Conference on Machine Learning}, 1398:\penalty0
+  137--142, 1998.
+\newblock URL
+  \url{http://www.cs.cornell.edu/People/tj/publications/joachims_98a.pdf}.
 
 \end{thebibliography}

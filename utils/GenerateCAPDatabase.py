@@ -8,22 +8,14 @@ import csv
 import MySQLdb as mdb
 import warnings
 from subprocess import Popen, PIPE
+from config import *
 import re
 
 """
-    Goal: Read CAP Reports and store in sqlite database
+    Goal: Read CAP Reports and store in MySQL database
 """
 
 logging.basicConfig(format='%(asctime)s;%(levelname)s:%(message)s', level=logging.DEBUG)
-
-####### Begin Edit ########
-storm_events_path = '../StormEvents/StormEventData.csv'
-cap_path = '../noaa-cap-xml/'
-mysql_host = 'localhost'
-mysql_user = 'root'
-mysql_pass = ''
-mysql_db = 'weather-severity'
-####### End Edit ########
 
 schema_file = 'schema.sql'
 tz = re.compile(r'[^\d-]+')

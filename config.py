@@ -45,6 +45,5 @@ def translateSeverity(direct_deaths, indirect_deaths, direct_injuries, indirect_
     """
         TODO Implement and move this to a 'util' file
         Function to convert from predicted deaths/injuries/damage to severity
-        Output: 1-4 (1 least severe, 5 most severe)
-    """
+        Output: 1-4 (1 least severe, 5 most severe)    """
     return 1

@@ -12,12 +12,12 @@
 import csv
 import glob
 import os
+from config import *
 
 # I think the "update" event details files are included in the main event details files
 # as such, only the event_details_YYYYMM.csv should be used
 file_format = "event_details_??????.csv"
 file_location = "../StormEvents/original"
-output_file = "../StormEvents/StormEventData.csv" # Output for new CSV
 
 expected_headers = [
     'last_date_modified',
@@ -61,7 +61,7 @@ expected_headers = [
 
 remove_column = 34 # Removing 'episode_title' and everything afterwards
 
-with open(output_file,'wb') as out:
+with open(storm_events_path,'wb') as out:
     storm_writer = csv.writer(out)
     storm_writer.writerow(expected_headers[:remove_column])
 
