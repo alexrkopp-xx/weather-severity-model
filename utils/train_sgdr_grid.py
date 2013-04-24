@@ -1,10 +1,9 @@
 from sklearn.grid_search import GridSearchCV
 from sklearn.linear_model import SGDRegressor
 from sklearn.cross_validation import KFold
-from sklearn.svm import SVR
-import logging
 import numpy as np
 import cPickle
+import logging
 
 logger = logging.getLogger('train')
 
@@ -14,17 +13,20 @@ handler.setFormatter(formatter)
 logger.addHandler(handler)
 logger.setLevel(logging.INFO)
 
+
 # Load Feature Matrix
 feature_matrix = cPickle.load(open('2013-04-20 183207/features.dat', 'r'))
 # Load Target Data
 logger.info("Converting to CSR Matrix to make life easier...")
 feature_matrix = feature_matrix.tocsr()
+print feature_matrix.shape
 
-parameters = {'kernel': ('linear', 'rbf'), 'C': [1, 10]}
+parameters = {'loss': ('squared_loss', 'huber'), 'penalty': ('l2', 'l1', 'elasticnet'),
+              'alpha': [1.00000000e+01, 1.00000000e+02, 1.00000000e+03, 1.00000000e+04, 1.00000000e+05, 1.00000000e+06],
+              'n_iter': [5, 10]}
 
-for target in ['crop_damages', 'property_damages', 'direct_deaths', 'indirect_deaths', 'direct_injuries',
-               'indirect_injuries']:
-
+for target in ['property_damages', 'direct_deaths', 'indirect_deaths', 'direct_injuries',
+               'indirect_injuries', 'crop_damages']:
     avg_train_score = 0
     avg_test_score = 0
 
@@ -34,9 +36,8 @@ for target in ['crop_damages', 'property_damages', 'direct_deaths', 'indirect_de
     target_matrix = np.array(target_matrix)
 
     kf = KFold(len(target_matrix), n_folds=3, indices=True, shuffle=True)
-
-    svr = SVR(verbose=True, cache_size=500, tol=0.01)
-    gs = GridSearchCV(svr, parameters, n_jobs=-1, cv=kf, verbose=999, refit=False)
+    sgdr = SGDRegressor(shuffle=True, verbose=1, epsilon=1.0)
+    gs = GridSearchCV(sgdr, parameters, n_jobs=-1, cv=kf, verbose=999, refit=False)
     gs.fit(feature_matrix, target_matrix)
 
     logger.info(gs.grid_scores_)
