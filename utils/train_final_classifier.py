@@ -40,4 +40,4 @@ sgdc.fit(feature_matrix, target_matrix)
 with open('final_classifier_' + target + '.dat', 'wb') as outfile:
     cPickle.dump(sgdc, outfile, cPickle.HIGHEST_PROTOCOL)
 with open('final_classifier_' + target + '_coef.dat', 'wb') as outfile:
-    cPickle.dump(sgdc, outfile, cPickle.HIGHEST_PROTOCOL)
+    cPickle.dump(sgdc.coef_, outfile, cPickle.HIGHEST_PROTOCOL)
