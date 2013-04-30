@@ -21,7 +21,7 @@ logger.info("Converting to CSR Matrix to make life easier...")
 feature_matrix = feature_matrix.tocsr()
 print feature_matrix.shape
 
-parameters = {'loss': ('hinge', 'huber'), 'penalty': ('l2', 'l1', 'elasticnet')}
+parameters = {'loss': ('squared_loss', 'huber'), 'penalty': ('l2', 'l1', 'elasticnet')}
 
 for target in ['property_damages', 'crop_damages']:
 
