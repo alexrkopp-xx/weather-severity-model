@@ -8,8 +8,8 @@ import csv
 import MySQLdb as mdb
 import warnings
 from subprocess import Popen, PIPE
-from config import *
 import re
+from config import *
 
 """
     Goal: Read CAP Reports and store in MySQL database
@@ -18,6 +18,7 @@ import re
 logging.basicConfig(format='%(asctime)s;%(levelname)s:%(message)s', level=logging.DEBUG)
 
 schema_file = 'schema.sql'
+
 tz = re.compile(r'[^\d-]+')
 
 def monetary_damage_convert(m):
