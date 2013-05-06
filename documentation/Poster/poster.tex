@@ -1,4 +1,4 @@
-\documentclass[landscape,final,a1paper,fontscale=0.45]{baposter}
+\documentclass[landscape,final,paperwidth=36in,paperheight=24in,fontscale=0.55]{baposter}
 
 \usepackage{calc}
 \usepackage{graphicx}
@@ -8,11 +8,19 @@
 \usepackage{multirow}
 \usepackage{rotating}
 \usepackage{bm}
+
 \usepackage{url}
+\renewcommand{\thefootnote}{\roman{footnote}}	
 
 \usepackage{pifont}% http://ctan.org/pkg/pifont
 \newcommand{\cmark}{\ding{51}}%
 \newcommand{\xmark}{\ding{55}}%
+
+ \usepackage{enumitem}
+   \setenumerate{nolistsep}
+   \setitemize{nolistsep}
+
+\def\labelitemi{\tiny$\blacksquare$}
 
 \usepackage{graphicx}
 \usepackage{multicol}
@@ -44,7 +52,8 @@
 \newcommand{\NegE}{\SET N}
 \newcommand{\Occluded}{\SET O}
 \newcommand{\occluded}{o}
-
+\newcommand{\specialcell}[2][c]{%
+  \begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%% Some math symbols used in the text
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -114,7 +123,7 @@
   {
   % Show grid to help with alignment
   grid=false,
-  columns=5,
+  columns=6,
   % Column spacing
   colspacing=1em,
   % Color style
@@ -145,9 +154,9 @@
   % Eye Catcher
   {\includegraphics[height=5em]{images/cornelltech.png}} 
   % Title
-  {\bf\textsc{Weather Severity Prediction}\vspace{0.5em}}
+  {\bf\textsc{Weather Severity Prediction}\vspace{0.1em}}
   % Authors
-  {\textsc{Alex Kopp, Andrew Li}}
+  {\textsc{Alex Kopp, Andrew Li}\\ \vspace{0.5em}\textsc{\textbf{Mentors:} Serge Belongie, Alice Bonhomme-Biais}}
   % University logoWikipedia
   {% The makebox allows the title to flow into the logo, this is a hack because of the L shaped logo.
     \includegraphics[height=6em]{images/google.jpg}
@@ -169,50 +178,76 @@
       \tikz{\useasboundingbox (-0.2em,-0.32em) rectangle(0.2em,0.32em); \draw[draw=black,fill=lightblue,line width=0.03em] (0,0) circle(0.18em);}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \headerbox{Overview}{name=overview,column=0,row=0, span=3}{
+  \headerbox{Opportunity/Value}{name=overview,column=0,row=0, span=3}{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
    \section*{Opportunity}
    \vspace{-3mm} 
-   \indent \indent Lorem ipsum dolor sit amet, consectetur adipiscing elit. In eu velit et tortor dapibus facilisis quis ac nunc. Phasellus molestie erat vel risus dapibus varius. Nunc mollis urna a libero pellentesque faucibus. Cras nec luctus massa. Mauris eleifend aliquam felis a vulputate. Pellentesque faucibus adipiscing libero, eu hendrerit ligula rutrum nec. Morbi dolor nisl, congue at hendrerit et, tincidunt vel quam.
+   \indent \indent The National Weather Service (NWS) issues weather alerts in the event of an upcoming severe weather event. These alerts trigger systems that launch news, internet, and mobile messages to warn the public of threats to life and property. These alerts, however, do
+not have a structured measure to indicate the actual severity of the weather event. As a result, a storm that passes by and causes little or no damage may have had the same Severe Thunderstorm Warning as the 2012 derecho that killed 22 people across seven states and left 4.2 million without power for an extended period. We were taked with building a model that can predict the severity of an upcoming storm based on the free-text descriptions and instructions inside the public alerts.
 
-Aenean iaculis dictum ipsum nec viverra. Nulla auctor felis nec dui pharetra posuere ut sed enim. Suspendisse potenti. Etiam placerat porta nisl nec facilisis. Donec ipsum metus, lacinia eu dictum vel, placerat eu arcu. Maecenas eget porta justo. Ut et neque tortor, non elementum purus. Phasellus ante est, pellentesque non varius vitae, pharetra quis dolor. Suspendisse in dictum ligula. Sed imperdiet nunc vel nibh luctus a porta leo venenatis. Integer quis sapien ac lectus condimentum condimentum.
-  \vspace{-3mm} 
-  \section*{Value}
- \vspace{-3mm}
- 
-\indent \indent Cras tincidunt tincidunt suscipit. Nullam adipiscing feugiat sem, eu malesuada enim ultricies in. Donec leo odio, tempor auctor molestie in, elementum lobortis orci. Fusce id lectus posuere leo aliquam facilisis dapibus quis mi. Curabitur egestas dignissim nisi sed accumsan. Ut sed tortor neque. Morbi in lorem sit amet velit bibendum luctus at a justo. Mauris orci turpis, dictum eu facilisis id, hendrerit non mi. Ut erat justo, eleifend vel tempus at, elementum quis enim. Nunc imperdiet varius sapien, et cursus nisi molestie a. Pellentesque diam diam, congue vitae mollis a, molestie sit amet ante. Nullam placerat magna eros, eget auctor elit. Vivamus id libero purus, quis dictum felis.
+\textbf{Value Here}\\
+test\\
+test\\
+test\\
 
  }
 
+
   
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \headerbox{Results}{name=results,column=3, span=2, row=0}{
+  \headerbox{Glossary}{name=glossary,column=3, span=3, row=0}{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   \vspace{0.3em}
+   \begin{multicols*}{2}
+	\setlength\multicolsep{0pt}
+   \begin{description}
+   \setlength{\itemsep}{1pt}
+   \setlength{\itemindent}{-1em}
+   \setlength{\leftmargin}{-23em}
+   \item[NWS] National Weather Service
+   \item[NOAA] National Oceanic and Atmospheric Administration
+   \item[CAP] Common Alerting Protocol. The protocol used by the National Weather Service to send out weather alerts.
+   \item[Storm Event Database] A database of storm damage, injuries, and deaths managed by the National Oceanic and Atmospheric Administration
+   \item[Tokenizing] Breaking a string of text into meaningful sections (tokens). For this project, we broke text into words.
+   \item[Stemming] Reducing words to their root form. For example: "educate" and "educational" both get reduced to "educ"
+   \item[TFIDF] Term frequency-inverse document frequency. A term weighting method that uses both the frequency of the term in the document as well as the frequency of the term across the rest of the corpus
+   \item[Stop Words] Extremely common words that add little to no value to a sentence
+   \item[N-Grams] Sequences of words of length $N$
+   \end{description}
+   \end{multicols*}
+ }
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \headerbox{Results}{name=results,column=3, span=3, row=0, below=glossary}{
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \begin{center}
+  %\includegraphics[width=1\linewidth]{images/diagram.pdf}
+  \begin{tabular}{r|cccccc}
+  & \textbf{Property Damage} & \textbf{Crop Damage} & \textbf{Direct Deaths} & \textbf{Indirect Deaths} & \textbf{Direct Injuries} & \textbf{Indirect Injuries} \\ 
+\hline 
+\rule{0pt}{2ex} \textbf{Classification Accuracy} & $88\%$ & $98.77\%$ & $99.5\%$ & $99.94\%$ & $99.4\%$ & $99.91\%$ \\ 
+\textbf{Base Rate}                               & $24.36\%$ & $2.2\%$ & $0.5\%$ & $0.06\%$ & $0.6\%$ & $0.09\%$ \\ 
+\hline
+\hline
+\textbf{Improvement} & $\color{green} 12.36\%$ & $\color{orange} 0.97\%$ & $\color{red} 0.00\%$ & $\color{red} 0.00\%$ & $\color{red} 0.00\%$ & $\color{red} 0.00\%$ \\ 
+\end{tabular} \\
+\textit{Classification - Predicting whether a NWS CAP report will lead to at least \textbf{one} of each respective storm severity indicator}\\
+\textit{Base Rate - The percentage of NWS CAP reports in our database that have at least \textit{one} of each respective storm severity indicator}
+  \end{center}
+
   \begin{center}
   
    %\includegraphics[width=0.8\linewidth]{images/fixedCgraph.pdf}
-  \begin{tabular}{c|c|c|c}
-$\boldsymbol{F_1}$ \textbf{\textit{Score}} & \textbf{Baseline} & \textbf{Refined} & \textbf{Refined + Links} \\ 
+\begin{tabular}{r|ccccc}
+%& \multicolumn{5}{c}{\textbf{Algorithm}} \\
+ & \textbf{Property Damage} & \textbf{Crop Damage} \\ 
 \hline 
-Business & 0.70 & $0.75$ & $0.75$ \\ 
-\hline 
-Culture & 0.89 & $0.91$ & $0.92$ \\ 
-\hline 
-Health & 0.84 & $0.86$ & $0.86$ \\ 
-\hline 
-Sports & 0.91 & $0.93$ & $0.94$ \\ 
-\hline 
-Technology & 0.72 & $0.76$ & $0.76$ \\ 
-\hline
-\hline
-\textbf{\textit{Average}} & \textbf{Baseline} & \textbf{Refined} & \textbf{Refined + Links} \\ 
-\hline 
-Precision & 0.81 & $0.84$ & $0.85$ \\ 
-\hline 
-Recall & 0.81 & $0.84$ & $0.85$ \\ 
-\hline 
-$\text{F}_1$ Score & 0.81 & $0.84$ & $0.85$ \\ 
-\hline 
+$\boldsymbol R^2$ & $\color{red} -0.00138520002963$ \footnote{Yes, an $R^2$ value can be negative} & $\color{orange} 0.389844743554$ \\ 
+\textbf{Regression} & Stochastic Gradient Descent Regressor & Stochastic Gradient Descent Regressor &  &  &  \\ 
+\textbf{Loss Function} & Huber & Squared Loss \\ 
+\textbf{Penalty} & L2 & L1 \\ 
+\textbf{Iterations} & $300$  & $300$ \\ 
 \end{tabular} 
 
 \end{center}
@@ -222,54 +257,69 @@ $\text{F}_1$ Score & 0.81 & $0.84$ & $0.85$ \\
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\headerbox{Discussion}{name=discussion,column=3,span=2,row=0, below=results}{
+\headerbox{Discussion}{name=discussion,column=3,span=3,row=0, below=results}{
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   
-Morbi nisi dui, ultricies in hendrerit eu, gravida eu odio. Aliquam lobortis sollicitudin iaculis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Phasellus vitae quam dui. Pellentesque cursus adipiscing tellus, vel varius ipsum aliquam non. Fusce in fringilla enim. Integer scelerisque, urna et volutpat dictum, arcu dui ultrices augue, quis sodales enim elit vitae metus. Donec et arcu ante, nec dignissim magna. Mauris eget odio in sapien adipiscing vehicula. Nulla auctor lacus nec felis bibendum fermentum.
+\begin{itemize}
+ \setlength{\itemindent}{-1em}
+\item \textbf{Results} - Test T
+\item \textbf{Matching storms across data sets takes creativity and error prone} - Test T
+\item \textbf{Predicting casualties turned out to be more difficult than expected} - Test T
+\item \textbf{Large amounts of sparse data can be difficult to work with} - Test
+\end{itemize}
 
-Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed eget scelerisque nibh. Nam in magna vel metus adipiscing tempus nec sed urna. Donec vel nibh vitae dolor elementum iaculis. Cras elementum dolor eget diam sollicitudin scelerisque. Donec vestibulum, tortor a interdum placerat, turpis nisi mattis est, non tristique orci sem quis eros. Sed et eros massa, sit amet molestie neque. Vestibulum nisi sapien, faucibus sed accumsan id, ultricies quis arcu. Nunc vel pellentesque nisi. Proin nec ipsum eros. Etiam tristique orci sit amet nibh venenatis at tempus enim ornare. Aliquam eu quam vel lorem porta vehicula. Nunc interdum eros rutrum massa aliquet vitae malesuada nunc rhoncus.u
-
-Phasellus ultricies ornare lacus at porttitor. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Quisque odio nisi, elementum quis facilisis id, laoreet in tellus. Praesent pulvinar iaculis eros id auctor. Curabitur accumsan libero et dolor rutrum elementum. Maecenas porttitor faucibus nunc sit amet aliquet. Donec a posuere eros. Nunc ac neque sem, ut imperdiet mi. Integer imperdiet tortor at erat ornare aliquam. Nullam imperdiet felis sed massa iaculis volutpat. Nam eros lectus, vestibulum nec interdum at, blandit a nisl. In adipiscing tempor magna tristique sagittis. Quisque urna tellus, pulvinar ut interdum et, tempus in nunc. Nullam turpis arcu, convallis non consectetur a, luctus et lectus.
 }
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\headerbox{Next Steps}{name=nextsteps,column=3,span=2,row=0,below=discussion, above=bottom}{
+\headerbox{Next Steps}{name=nextsteps,column=3,span=3,row=0,below=discussion, above=bottom}{
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Donec tortor massa, ornare eu vestibulum ut, molestie id est. Donec et nunc a magna semper dictum. Nulla ultrices neque nec quam aliquet a interdum magna facilisis. Vivamus tincidunt volutpat tempor. Nullam ut dui velit. Nullam nulla magna, porttitor in tincidunt ut, scelerisque nec libero. Integer quis risus non nunc tristique hendrerit quis eu lectus. Sed pharetra mauris sit amet urna molestie vel elementum turpis dictum. Aenean adipiscing, erat ac mattis sollicitudin, eros nulla luctus nunc, sit amet volutpat ante ante sed tellus. Pellentesque egestas metus nec orci iaculis egestas. Suspendisse potenti. Sed neque leo, ultricies ut condimentum ut, mollis sed dolor.
+\begin{itemize}
+ \setlength{\itemindent}{-1em}
+\item \textbf{Acquire more NWS CAP reports and NOAA Storm Event Database entries} - Test T
+\item \textbf{Additional domain knowledge} - Test T
+\item \textbf{Build additional models from different data sets} - Test
+\end{itemize}
 
    \vspace{0.0em}
 }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \headerbox{Method}{name=method,column=0,below=overview, span=3, bottomaligned=nextsteps}{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  %\noindent{\centering\includegraphics[width=0.15\linewidth]{images/scikit-learn-logo.png}\\}
-\textbf{Approach} Talk about how we transformed the problem from predicting severity to predicting injuries, deaths, and damage. Talk about why we did this.
+\textbf{Approach} Since we were not given a precise definition of "severity," it was left to us to determine which factors govern the severity of a storm. Since we only had access to \textit{direct deaths}, \textit{indirect deaths}, \textit{direct injuries}, \textit{indirect injuries}, \textit{property damage}, and \textit{crop damage}, we transformed the task into building a model to predict each of these severity indicators.\\
 
-\textbf{1. Data Preprocessing} Donec eget laoreet quam. Maecenas condimentum mollis bibendum. Suspendisse massa purus, sollicitudin et porttitor eget, commodo ac lacus. Aliquam erat volutpat. Aenean nunc metus, cursus ac pharetra at, laoreet ac lacus. Vestibulum et neque sit amet nulla molestie faucibus dapibus eget turpis. Cras mollis turpis eget enim rutrum porttitor. Nunc pulvinar, tellus quis molestie adipiscing, mauris nibh tempor ligula, ut vulputate magna lorem et nibh.
+\noindent{\centering\includegraphics[width=0.75\linewidth]{images/Method.png}\\}
+\begin{multicols*}{2}
+	\setlength\multicolsep{0pt}
+	\begin{enumerate}
+	   \setlength{\itemindent}{-1em}
+		\setlength{\itemsep}{3pt}
+		\item \textbf{Data Preprocessing} 
+		\begin{enumerate}[leftmargin=2em]
+			\setlength{\itemindent}{-1.5em}
+			\item \textbf{Parsing CAP Reports} - Used NWS CAP Parser package for Python. Converted dates/times to UTC. Assumed a storm's start date/time was given by the \textit{onset} attribute in the CAP report. If that attribute was not populated, the \textit{effective} attribute was used. If the \textit{effective} attribute was not populated, the mandatory \textit{sent} field was used.
+			\item \textbf{Parsing NOAA Storm Events Database} - Used Python's CSV parsing package. Unfortunately, the CSV is malformed (quotes and commas are present and not escaped in free-text fields). Luckily, the malformed portion comes after the information that was needed. Converted dates/times to UTC. Converted \textit{property damage} and \textit{crop damage} fields from shorthand notation to an actual number (e.g $100K \rightarrow 100000$)
+		\end{enumerate}
 
-\textbf{2. Matching} Praesent ac sodales leo. Donec tristique ullamcorper porta. Vivamus tincidunt leo sed sapien dignissim vulputate. Mauris ultrices luctus arcu. Aliquam scelerisque, massa quis auctor venenatis, mauris dui tempor magna, ut mattis sapien velit ut neque. Pellentesque erat est, fermentum eu commodo non, iaculis non sem. Morbi vel consectetur risus. Curabitur nibh dui, faucibus et tempus at, tristique eget lectus. Sed nec urna quis enim laoreet laoreet ut et urna. Maecenas vulputate magna a purus bibendum consequat. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+		\item \textbf{Matching}
+		\begin{enumerate}[leftmargin=2em]
+			\setlength{\itemindent}{-1.5em}
+			\item \textbf{Location Matching} - Used the \textit{FIPS 6-4} attribute in both CAP report and Storm Event Database to link counties and states.
+			\item \textbf{Storm Type Matching} - Since the NWS and NOAA have differing storm types, a matching process had to be done associating one agency's storm types to the other. With the help of Alice Bonhomme-Biais, a list of plausible event type matches was constructed.
+			\item \textbf{Time Matching} - To account for minor differences in time between the data sets, a particular CAP report must overlap an entry in the Storm Event Database by at least $25\%$ to be considered a match
+		\end{enumerate}
 
-\textbf{3. Feature Extraction} Etiam commodo gravida purus, et eleifend sapien adipiscing et. Integer porta commodo felis nec pharetra. Maecenas sed elementum dolor. Vestibulum sollicitudin ipsum non quam venenatis imperdiet in et erat. Nulla ut risus nibh. Donec auctor augue non mi mattis nec aliquet erat luctus. Aliquam neque enim, elementum a hendrerit vel, dictum ac arcu. Vestibulum et massa sit amet elit sodales convallis. Sed posuere augue a lacus lacinia rutrum. Fusce tincidunt porta diam sed luctus. Fusce sed leo velit, quis dictum risus. Nulla facilisi. Nullam turpis ipsum, tincidunt dignissim consectetur nec, cursus ut sem. Proin consequat ultricies mauris. Proin non lectus purus, vitae iaculis nisl.  
+		\item \textbf{Feature Extraction} - The process of extracting features creates a vector representation of each example in our data sets. More concretely, each NWS CAP report needs to be converted into a vector of numbers. A CAP report has three types of data in it: categorical, quantitative, and free text. For categorical data, we used a one-hot encoding representation. For quantitative fields, we scaled the values using scikit-learn's \textit{StandardScaler}. Finally, free text fields were processed in the following steps:
+		\textbf{Tokenization}, \textbf{Stopword Removal}, \textbf{Porter Stemming}, \textbf{Unigram and Bigram Generator}, and \textbf{TFIDF Weighting}
+		
+		Ultimately, we had $457,351$ features for each of the $202,856$ examples in the data set.
 
-\textbf{4. Model Training} Cras et venenatis arcu. Praesent eleifend semper hendrerit. Donec nec nibh nec mi tincidunt scelerisque sit amet sit amet velit. Nullam ut enim ut lacus placerat fringilla. In elementum vulputate gravida. Integer dapibus mi sed risus convallis id sollicitudin nisl gravida. Aliquam et lectus sed diam convallis sodales ut non eros.
+		\item \textbf{Model Training} - Since we are trying to predict real, continuous numbers, a regression algorithm is the tool for the job. Since the majority of training examples have zero injuries/deaths/damage, we actually built a classifier in addition to a regressor. The classifier would predict whether or not there would be \textit{any} injuries/deaths/damage. The logic behind this is to only use the regression model if the classifier gives a positive result. Our results are displayed in the Results section.
 
-\textbf{5. Final Prediction} Condimentum turpis sagittis gravida in ac elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi volutpat, velit faucibus feugiat accumsan, diam eros vestibulum tortor, ut feugiat mi nunc eu turpis. In eleifend tempor libero eu aliquet. Donec congue adipiscing hendrerit. Etiam aliquet venenatis libero vitae blandit. Sed vel dolor sed velit consectetur mattis. Nunc ut ipsum risus. Aenean malesuada urna vitae magna vestibulum nec vehicula erat aliquam. Nunc lorem elit, ornare et consequat nec, volutpat ac odio. Fusce dictum mauris eget lectus porta cursus. Quisque eu lacinia nibh.
-
-  \begin{center}
-  %\includegraphics[width=1\linewidth]{images/diagram.pdf}
-  
-  \section*{Algorithms}  
-  \begin{tabular}{r|ccccccc}
-  & \textbf{Lowercase} & \shortstack{\textbf{Remove} \\ \textbf{Stopwords}} & \textbf{Stemming} & \textbf{Features} & \shortstack{\textbf{Remove} \\ \textbf{Infrequent Words}} & \textbf{Normalization} & \textbf{Use Links}\\ 
-\hline 
-\rule{0pt}{2ex} \textbf{Baseline} & $\checkmark$ & $\checkmark$ & $\checkmark$ & \textit{Binary} & \xmark & \xmark & \xmark \\ 
-\textbf{Refined} & $\checkmark$ & $\checkmark$ & $\checkmark$ & \textit{TFIDF} & $\checkmark$ & $\checkmark$ & \xmark \\ 
-\textbf{Refined+Links} & $\checkmark$ & $\checkmark$ & $\checkmark$ & \textit{TFIDF} & $\checkmark$ & $\checkmark$ & $\checkmark$ \\ 
-\end{tabular} 
-  \end{center}
- 
+		\item \textbf{Final Prediction} - Although this step is incomplete, it is pretty trivial to create once satisfactory models are built. At a high level, a new CAP report is converted into a vector in the same way that the feature extraction was performed on the training data. Next, the vector is passed into each of the injury/death/damage models. A real number is returned. Then, the predicted values get plugged into an equation to transform into a categorical storm severity value.
+	 \end{enumerate}
+ \end{multicols*}
   }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
